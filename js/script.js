@@ -20,9 +20,9 @@ var infiniteBackground = {
       scope.el.style.backgroundPosition = `-${topOffset}px 0px`;
     });
   },
-  init: function (el, bg) {
+  init: function (el, bg = "../img/bg.png") {
     this.el = el;
-    this.style.backgroundImage = bg ? `url("${bg}")` : 'url("../img/bg.png")';
+    this.style.backgroundImage = `url("${bg}")`;
     Object.assign(this.el.style, this.style);
     this.scrollSideways();
   },
