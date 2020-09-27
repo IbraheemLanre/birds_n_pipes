@@ -82,13 +82,11 @@ class Bird {
 
     parentEl.appendChild(birdEl);
     this.addGravity();
+    var scope = this;
 
-    document.getElementById(this.id).addEventListener(
-      "click",
-      function () {
-        this.jump();
-      }.bind(this)
-    );
+    document.addEventListener("click", function () {
+      scope.jump();
+    });
   }
 
   moveLeft(distance) {
@@ -100,32 +98,37 @@ class Bird {
 
   addGravity() {
     var scope = this;
-    setInterval(function () {
+    var gravity = setInterval(function () {
       if (scope.jumping) {
         return;
       }
 
       var _current = parseInt(scope.style.top);
       if (_current == 100) {
-        var fallenBird = new Event("FALLEN_BIRD");
+        var fallenBird = new CustomEvent("FALLEN_BIRD", { detail: scope.id });
         console.log(`Dispatching a FALLEN Event from the bird ${scope.id}`);
         document.dispatchEvent(fallenBird);
       }
       var _new = _current < 100 ? _current + 1 : _current;
       scope.style.top = _new;
       document.getElementById(scope.id).style.top = `${_current}%`;
-    }, 1000 / 55);
+    }, 1000 / 35);
+
+    document.addEventListener("FALLEN_BIRD", function (e) {
+      if (e.detail == scope.id) {
+        clearInterval(gravity);
+      }
+    });
   }
 
   jump() {
     var scope = this;
-
     var counter = 0;
 
     this.jumping = true;
 
     setInterval(function () {
-      if (counter === 10) {
+      if (counter === 15) {
         scope.jumping = false;
         return;
       }
@@ -149,12 +152,12 @@ $(document).ready(function () {
     pipes[i] = new Pipe(document.body);
   }
 
-  var birds = new Array(20);
-  console.log(birds);
+  // var birds = new Array(10);
+  // for (var i = 0; i < birds.length; i++) {
+  //   birds[i] = new Bird(document.body);
+  // }
 
-  for (var i = 0; i < birds.length; i++) {
-    birds[i] = new Bird(document.body);
-  }
+  var bird1 = new Bird(document.body);
 
   var offset = 0;
   var autoScroll = setInterval(function () {
