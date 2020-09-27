@@ -60,9 +60,10 @@ class Bird {
   constructor(parentEl) {
     this.id = "bird_" + Math.floor(Math.random() * 2000);
     this.imgSrc = "../img/bird.png";
+    this.jumping = false;
     this.style = {
       position: "fixed",
-      top: Math.floor(Math.random() * 70) + "%",
+      top: Math.floor(Math.random() * 80) + "%",
       left: Math.floor(Math.random() * 2000) + "px",
       width: Math.floor(Math.random() * 200) + "px",
     };
@@ -74,6 +75,14 @@ class Bird {
     Object.assign(birdEl.style, this.style);
 
     parentEl.appendChild(birdEl);
+    this.addGravity();
+
+    document.getElementById(this.id).addEventListener(
+      "click",
+      function () {
+        this.jump();
+      }.bind(this)
+    );
   }
 
   moveLeft(distance) {
@@ -81,6 +90,41 @@ class Bird {
     document.getElementById(this.id).style.left = `${
       _current + distance / this.movementRatio
     }px`;
+  }
+
+  addGravity() {
+    var scope = this;
+    setInterval(function () {
+      if (scope.jumping) {
+        return;
+      }
+
+      var _current = parseInt(scope.style.top);
+      var _new = _current < 99 ? _current + 1 : _current;
+      scope.style.top = _new;
+      document.getElementById(scope.id).style.top = `${_current}%`;
+    }, 1000 / 55);
+  }
+
+  jump() {
+    var scope = this;
+
+    var counter = 0;
+
+    this.jumping = true;
+
+    setInterval(function () {
+      if (counter === 10) {
+        scope.jumping = false;
+        return;
+      }
+      this.jumping = true;
+      var _current = parseInt(scope.style.top);
+      counter++;
+      var _new = _current > 1 ? _current - 1 : _current;
+      scope.style.top = _new;
+      document.getElementById(scope.id).style.top = `${_current}%`;
+    }, 1000 / 75);
   }
 }
 
