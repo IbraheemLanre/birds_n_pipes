@@ -67,6 +67,7 @@ class Bird {
     this.id = "bird_" + Math.floor(Math.random() * 2000);
     this.imgSrc = "../img/bird.png";
     this.jumping = false;
+    this.fallen = false; //By default a bird is not fallen until it has thrown the FALLEN_BIRD event
     this.style = {
       position: "fixed",
       top: Math.floor(Math.random() * 80) + "%",
@@ -85,6 +86,9 @@ class Bird {
     var scope = this;
 
     document.addEventListener("click", function () {
+      if (scope.fallen) {
+        return; // don't perform jumping if the bird has fallen
+      }
       scope.jump();
     });
   }
@@ -116,6 +120,7 @@ class Bird {
 
     document.addEventListener("FALLEN_BIRD", function (e) {
       if (e.detail == scope.id) {
+        scope.fallen = true; // set status of this bird to fallen
         clearInterval(gravity);
       }
     });
