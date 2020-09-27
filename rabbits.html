@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="rabbit-btn">Count Rabbits</button>
+    <div class="text"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      var counter = 0;
+      document.getElementById("rabbit-btn").onclick = countRabbit;
+
+      function countRabbit() {
+        counter++;
+        document.getElementsByClassName("text")[0].innerText =
+          "Counting rabbits... number ..." + counter;
+      }
+    </script>
+  </body>
+</html>
