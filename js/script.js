@@ -33,7 +33,7 @@ class Pipe {
     this.style = {
       position: "fixed",
       top: null,
-      left: Math.floor(Math.random() * 2000) + "px",
+      left: Math.floor(Math.random() * 10000) + "px",
       width: Math.floor(Math.random() * 200) + "px",
       bottom: 0,
     };
@@ -89,32 +89,29 @@ $(document).ready(function () {
   // not to the class
   var bg = new Background(document.getElementById("background"));
 
-  var pipe1 = new Pipe(document.body);
-  var pipe2 = new Pipe(document.body);
-  var pipe3 = new Pipe(document.body);
-  var pipe4 = new Pipe(document.body);
-  var pipe5 = new Pipe(document.body);
+  var pipes = new Array(20);
+  for (var i = 0; i < pipes.length; i++) {
+    pipes[i] = new Pipe(document.body);
+  }
 
-  var bird1 = new Bird(document.body);
-  var bird2 = new Bird(document.body);
-  var bird3 = new Bird(document.body);
-  var bird4 = new Bird(document.body);
-  var bird5 = new Bird(document.body);
+  var birds = new Array(20);
+  console.log(birds);
+
+  for (var i = 0; i < birds.length; i++) {
+    birds[i] = new Bird(document.body);
+  }
 
   document.addEventListener("scroll", function () {
     var offset = window.scrollY;
 
     bg.scrollSideWay(offset);
-    pipe1.moveLeft(offset);
-    pipe2.moveLeft(offset);
-    pipe3.moveLeft(offset);
-    pipe4.moveLeft(offset);
-    pipe5.moveLeft(offset);
 
-    bird1.moveLeft(offset);
-    bird2.moveLeft(offset);
-    bird3.moveLeft(offset);
-    bird4.moveLeft(offset);
-    bird5.moveLeft(offset);
+    pipes.forEach(function (pipe) {
+      pipe.moveLeft(offset);
+    });
+
+    birds.forEach(function (bird) {
+      bird.moveLeft(offset);
+    });
   });
 });
