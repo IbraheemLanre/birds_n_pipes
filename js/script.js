@@ -48,6 +48,12 @@ class Pipe {
     parentEl.appendChild(pipeEl);
   }
 
+  /**
+   * Calculate the actual distance that the pipe needs to be shifted to the left of the screen
+   * according to the distance parameter and the movement ratio
+   * @param {Number} distance
+   */
+
   moveLeft(distance) {
     let _current = parseInt(this.style.left);
     document.getElementById(this.id).style.left = `${
@@ -100,7 +106,12 @@ class Bird {
       }
 
       var _current = parseInt(scope.style.top);
-      var _new = _current < 99 ? _current + 1 : _current;
+      if (_current == 100) {
+        var fallenBird = new Event("FALLEN_BIRD");
+        console.log(`Dispatching a FALLEN Event from the bird ${scope.id}`);
+        document.dispatchEvent(fallenBird);
+      }
+      var _new = _current < 100 ? _current + 1 : _current;
       scope.style.top = _new;
       document.getElementById(scope.id).style.top = `${_current}%`;
     }, 1000 / 55);
@@ -145,17 +156,18 @@ $(document).ready(function () {
     birds[i] = new Bird(document.body);
   }
 
-  document.addEventListener("scroll", function () {
-    var offset = window.scrollY;
-
+  var offset = 0;
+  var autoScroll = setInterval(function () {
+    offset += 200;
     bg.scrollSideWay(offset);
 
     pipes.forEach(function (pipe) {
       pipe.moveLeft(offset);
     });
+  }, 50);
 
-    birds.forEach(function (bird) {
-      bird.moveLeft(offset);
-    });
+  document.addEventListener("FALLEN_BIRD", function () {
+    console.log("Detected a fallen bird");
+    clearInterval(autoScroll);
   });
 });
